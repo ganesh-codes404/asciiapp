@@ -1,0 +1,31 @@
+.terminal-container {
+    background-color: black;
+    color: #00FF00;
+    padding: 1rem;
+    font-family: monospace;
+    height: 80vh;
+    overflow-y: auto;
+    font-size: large;
+  }
+  
+  .terminal-output {
+    margin-bottom: 0.5rem;
+    font-size: large;
+  }
+  
+  .terminal-form {
+    display: flex;
+    align-items: center;
+    margin-top: 1rem;
+  }
+  
+  .terminal-input {
+    background: black;
+    color: #00FF00;
+    border: none;
+    outline: none;
+    font-family: monospace;
+    width: 80%;
+    font-size: large;
+  }
+  

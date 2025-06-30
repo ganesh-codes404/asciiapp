@@ -1,0 +1,28 @@
+.skribble-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2rem;
+  }
+  
+  .canvas-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .skribble-canvas {
+    border: 1px solid #00FF00;
+    max-width: 90%;
+    height: auto;
+  }
+  
+  
+button{
+    font-family: monospace;
+    background: none;
+    border-color: #111;
+    box-shadow: none;
+    color: #00FF00;
+}
