@@ -1,16 +1,22 @@
 .terminal-container {
     background-color: black;
-    color: #00FF00;
+    color: #00ff00;
     padding: 1rem;
     font-family: monospace;
     height: 80vh;
-    overflow-y: auto;
     font-size: large;
+    position:sticky;
+    position: left;
+
   }
   
   .terminal-output {
     margin-bottom: 0.5rem;
     font-size: large;
+    display: flex;
+    white-space: pre-wrap;
+    font-family: monospace;
+    color: #00FF00;
   }
   
   .terminal-form {
@@ -27,5 +33,12 @@
     font-family: monospace;
     width: 80%;
     font-size: large;
+  }
+  .blink {
+    animation: blink 1s step-start infinite;
+  }
+  
+  @keyframes blink {
+    50% { opacity: 0; }
   }
   

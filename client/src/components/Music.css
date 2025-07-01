@@ -1,0 +1,71 @@
+.music-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    color: #00FF00;
+    background-color: #000000;
+    font-family: monospace;
+    min-height: 100vh;
+  }
+  
+  .music-title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #00FF00;
+    padding-bottom: 0.5rem;
+  }
+  
+  .music-upload {
+    margin-bottom: 1.5rem;
+    background: black;
+    color: #00FF00;
+    border: 1px solid #00FF00;
+    padding: 0.5rem;
+    cursor: pointer;
+  }
+  
+  .track-list {
+    list-style: none;
+    padding: 0;
+    width: 80%;
+    max-width: 500px;
+    margin-bottom: 2rem;
+  }
+  
+  .track-item {
+    margin: 0.5rem 0;
+  }
+  
+  .track-button {
+    width: 100%;
+    background: #111;
+    color: #00FF00;
+    border: 1px solid #00FF00;
+    padding: 0.5rem;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.3s;
+  }
+  
+  .track-button:hover {
+    background: #00FF00;
+    color: black;
+  }
+  
+  .now-playing {
+    margin-top: 2rem;
+    text-align: center;
+  }
+  
+  .now-playing h4 {
+    margin-bottom: 1rem;
+  }
+  
+  audio {
+    width: 300px;
+    outline: none;
+    color: #00FF00;
+    filter: invert(150%);
+  }
+  

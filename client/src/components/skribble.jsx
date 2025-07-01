@@ -110,6 +110,7 @@ export default function Skribble() {
       <div className="canvas-wrapper">
         <canvas ref={canvasRef} className="skribble-canvas"></canvas>
       </div>
+      <div className='m'><p>Hold Shift for drawing | Hit C for clearing</p></div>
     </div>
   );
   }  
