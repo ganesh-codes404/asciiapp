@@ -44,7 +44,7 @@ export default function Navbar({ setActivePage }) {
       display: 'flex',
       justifyContent: 'center',
       fontFamily: 'monospace',
-      position:'sticky',
+
       top:'0',
       right:'0',
       zIndex:'1000',

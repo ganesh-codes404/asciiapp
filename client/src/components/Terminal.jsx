@@ -87,8 +87,12 @@ export default function Terminal({ setActivePage }) {
   };
 
   return (
+    
     <div className="terminal-container">
+            <div className='m'><p>'help' for list of commands</p></div>
+
       {output.map((line, idx) => (
+        
         <div key={idx} className="terminal-output">{line}</div>
       ))}
   {/* {output.map((line, idx) => (
