@@ -78,7 +78,7 @@ app.get('/feed', async (req, res) => {
   }
 });
 
-// Route to update preferences map
+
 app.post('/update-preferences', (req, res) => {
   const { topic, weight } = req.body;
 

@@ -6,6 +6,8 @@ export default function Terminal({ setActivePage }) {
   const [output, setOutput] = useState([]);
   const [messages, setMessages] = useState([]); 
   const [loading, setLoading] = useState(false)
+  const [history, setHistory] = useState([]);
+  const [historyIndex, setHistoryIndex] = useState(-1);
 
   const handleCommand = async (e) => {
     e.preventDefault();
@@ -14,8 +16,14 @@ export default function Terminal({ setActivePage }) {
     const cmd = input_cmd.toLowerCase();
     let response = '';
 
+    if (!cmd) return;
+
+    // ✅ Add to history
+    setHistory(prev => [...prev, temp]);
+    setHistoryIndex(-1); // reset index after each new command
+
     if (cmd === 'help') {
-      response = 'Available commands: help, clear, algo-status, /search [query]';
+      response = 'Available commands: help, clear, algo-status, /search [query], /llm [prompt]';
     } else if (cmd === 'clear') {
       setOutput([]);
       setInput('');
@@ -63,7 +71,7 @@ export default function Terminal({ setActivePage }) {
         const data = await response.json();
         console.log("API Response:", data);
     
-        const aiResponse = data?.choices?.[0]?.message?.content || "No response.";
+        const aiResponse = data?.choices?.[0]?.message?.content || "AI is resting. Please let it rest.";
         setMessages(prev => [...prev, { role: "user", content: prompt }, { role: "ai", content: aiResponse }]);
         setOutput(prev => [...prev, `$${temp}`, aiResponse]);
         
@@ -77,7 +85,6 @@ export default function Terminal({ setActivePage }) {
       setLoading(false);
       return;
     }
-    
     else {
       response = `Unknown command: ${temp}. Type 'help' for options.`;
     }
@@ -86,33 +93,51 @@ export default function Terminal({ setActivePage }) {
     setInput('');
   };
 
+
+  const handleKeyDown = (e) => {
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      if (history.length > 0) {
+        const newIndex = historyIndex === -1 ? history.length - 1 : Math.max(0, historyIndex - 1);
+        setHistoryIndex(newIndex);
+        setInput(history[newIndex]);
+      }
+    } else if (e.key === "ArrowDown") {
+      e.preventDefault();
+      if (history.length > 0) {
+        const newIndex = historyIndex === -1 ? -1 : Math.min(history.length - 1, historyIndex + 1);
+        if (newIndex === -1) {
+          setInput("");
+        } else {
+          setInput(history[newIndex]);
+        }
+        setHistoryIndex(newIndex);
+      }
+    }
+  };
+
   return (
-    
     <div className="terminal-container">
-            <div className='m'><p>'help' for list of commands</p></div>
+      <div className='m'><p>'help' for list of commands</p></div>
 
       {output.map((line, idx) => (
-        
         <div key={idx} className="terminal-output">{line}</div>
       ))}
-  {/* {output.map((line, idx) => (
-    <pre key={idx} className="terminal-output">{line}</pre>
-  ))} */}
 
       <form onSubmit={handleCommand} className="terminal-form">
         <span>$</span>
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
+          onKeyDown={handleKeyDown}  // 👈 Added here
           className="terminal-input"
           autoFocus
         />
-            {loading && (
-  <div className="terminal-output blink">
-    AI is thinking...
-  </div>
-
-)}
+        {loading && (
+          <div className="terminal-output blink">
+            Contacting AI...
+          </div>
+        )}
       </form>
     </div>
   );

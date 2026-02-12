@@ -5,7 +5,6 @@
     font-family: monospace;
     height: 80vh;
     font-size: large;
-    position:sticky;
     position: left;
 
   }
@@ -41,4 +40,6 @@
   @keyframes blink {
     50% { opacity: 0; }
   }
-  
+  .m{
+    font-size: small;
+  }

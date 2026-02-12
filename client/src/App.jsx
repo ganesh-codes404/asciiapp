@@ -88,54 +88,66 @@
 //   );
 // }
 import React, { useState, useRef, useEffect } from 'react';
+import Login from './components/login';
 import Navbar from './components/NavBar';
 import Home from './components/Home';
 import Chat from './components/Chat';
-import Skribble from './components/skribble';
+import Skribble from './components/Skribble';
 import Terminal from './components/Terminal';
-import Journal from './components/journal';
+import Journal from './components/Journal';
 import Music from './components/Music';
 import Settings from './components/Settings';
 
 export default function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [activePage, setActivePage] = useState('home');
   const [tracks, setTracks] = useState([]);
   const [currentTrack, setCurrentTrack] = useState(null);
   const [trackUrl, setTrackUrl] = useState(null);
   const audioRef = useRef();
+const ws = new WebSocket("ws://YOUR_IP:3001");
+
+ws.onmessage = (event) => {
+  const post = JSON.parse(event.data);
+  console.log("New post received:", post);
+
+  // Add post to state feed
+};
 
   useEffect(() => {
     if (currentTrack) {
       const url = URL.createObjectURL(currentTrack);
       setTrackUrl(url);
-
-      return () => {
-        URL.revokeObjectURL(url); // Cleanup old URL
-      };
+      return () => URL.revokeObjectURL(url);
     }
   }, [currentTrack]);
 
+  // If not logged in → show login only
+  if (!isLoggedIn) {
+    return <Login onLogin={() => setIsLoggedIn(true)} />;
+  }
+
+  // If logged in → show full app
   return (
     <div>
       <Navbar setActivePage={setActivePage} />
 
       {trackUrl && (
-  <audio
-    src={trackUrl}
-    controls
-    autoPlay
-    loop
-    style={{
-      position: 'fixed',
-      bottom: '10px',
-      left: '10px',
-      zIndex: 999,
-      background: 'black',
-      border: '1px solid #00FF00',
-    }}
-  />
-)}
-
+        <audio
+          src={trackUrl}
+          controls
+          autoPlay
+          loop
+          style={{
+            position: 'fixed',
+            bottom: '10px',
+            left: '10px',
+            zIndex: 999,
+            background: 'black',
+            border: '1px solid #00FF00',
+          }}
+        />
+      )}
 
       <div style={{ marginTop: '60px' }}>
         {activePage === 'home' && <Home />}

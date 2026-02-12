@@ -15,6 +15,7 @@
   .skribble-canvas {
     border: 1px solid #00FF00;
     max-width: 90%;
+    background-color: white;
     height: auto;
   }
   
