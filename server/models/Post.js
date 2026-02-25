@@ -6,11 +6,12 @@ const postSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
-  title: String,
-  image: String,
+  title: {type: String, required: true},
+  image: {type: String, required: true},
   likes: {
     type: Number,
     default: 0,
+    required: true,
   },
   createdAt: {
     type: Date,

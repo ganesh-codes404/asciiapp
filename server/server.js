@@ -9,6 +9,7 @@ app.use(express.json());
 app.use(cors());
 const mongoose = require("mongoose");
 const User = require("./models/User");
+const Post=require("./models/Post");
 
 mongoose.connect("mongodb://127.0.0.1:27017/asciiapp")
   .then(() => console.log("MongoDB connected"))
@@ -101,24 +102,9 @@ app.post("/create-post", async (req, res) => {
   res.json({ status: "Post sent to Kafka" });
 });
 
-app.post("/posts", async (req, res) => {
-  try {
-    const { userId, title, image } = req.body;
 
-    const newPost = new Post({
-      userId,
-      title,
-      image,
-    });
 
-    await newPost.save();
-    res.json(newPost);
 
-  } catch (err) {
-    console.error("Error creating post:", err);
-    res.status(500).json({ error: "Failed to create post" });
-  }
-});
 app.post("/users", async (req, res) => {
   try {
     const { username, email } = req.body;
@@ -147,6 +133,36 @@ app.get("/users", async (req, res) => {
     res.json(users);
   } catch (err) {
     res.status(500).json({ error: "Failed to fetch users" });
+  }
+});
+app.post("/posts", async (req, res) => {
+  try {
+    const { userId, title, image } = req.body;
+
+    const newPost = new Post({
+      userId,
+      title,
+      image,
+    });
+
+    await newPost.save();
+    res.json(newPost);
+
+  } catch (err) {
+    console.error("Error creating post:", err);
+    res.status(500).json({ error: "Failed to create post" });
+  }
+});
+app.get("/feed", async (req, res) => {
+  try {
+    const posts = await Post.find()
+      .populate("userId", "username")
+      .sort({ createdAt: -1 });
+
+    res.json(posts);
+
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch feed" });
   }
 });
 

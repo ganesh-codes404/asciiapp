@@ -58,6 +58,15 @@ export default function Home() {
   const [feed, setFeed] = useState([]);
 const [title, setTitle] = useState("");
 const [image, setImage] = useState("");
+let counter=0;
+let likebuttons=document.getElementsByClassName("like-button");
+let likecounts=document.getElementsByClassName("like-count");
+for(let i=0;i<likebuttons.length;i++){
+  likebuttons[i].addEventListener("click",()=>{
+    counter++;
+    likecounts[i].innerText=counter;
+  })
+}
 
   // Fetch existing posts from backend
   const fetchFeed = async () => {
@@ -136,7 +145,7 @@ const [image, setImage] = useState("");
             <img src={post.image} alt="Post" />
            <p><strong>{post.userId.username}</strong></p>
             <p>{post.title}</p>
-            <p>^ {post.likes}</p>
+            <button className="like-button">^</button> <span className="like-count">{post.likes}</span>
           </div>
         ))}
         <div className="create-post">
