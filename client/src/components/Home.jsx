@@ -134,6 +134,7 @@ const [image, setImage] = useState("");
         {feed.map((post) => (
           <div key={post.id} className="feed-item">
             <img src={post.image} alt="Post" />
+           <p><strong>{post.userId.username}</strong></p>
             <p>{post.title}</p>
             <p>^ {post.likes}</p>
           </div>

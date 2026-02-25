@@ -3,11 +3,16 @@ const axios = require('axios');
 const cors = require('cors');
 const { Kafka } = require("kafkajs");
 const WebSocket = require("ws");
-
 const app = express();
 app.use(express.json());
-app.use(cors());
 
+app.use(cors());
+const mongoose = require("mongoose");
+const User = require("./models/User");
+
+mongoose.connect("mongodb://127.0.0.1:27017/asciiapp")
+  .then(() => console.log("MongoDB connected"))
+  .catch(err => console.error("MongoDB error:", err));
 /* ---------------- KAFKA SETUP ---------------- */
 
 const kafka = new Kafka({
@@ -96,28 +101,54 @@ app.post("/create-post", async (req, res) => {
   res.json({ status: "Post sent to Kafka" });
 });
 
-app.post("/post", async (req, res) => {
+app.post("/posts", async (req, res) => {
   try {
-    const { title, image } = req.body;
+    const { userId, title, image } = req.body;
 
-    const newPost = {
-      id: Date.now(),
+    const newPost = new Post({
+      userId,
       title,
       image,
-      likes: 0,
-      createdAt: new Date()
-    };
+    });
 
-    // Send to Kafka
-    await sendMessage("ascii-events", newPost);
+    await newPost.save();
+    res.json(newPost);
 
-    res.json({ success: true, post: newPost });
   } catch (err) {
     console.error("Error creating post:", err);
     res.status(500).json({ error: "Failed to create post" });
   }
 });
+app.post("/users", async (req, res) => {
+  try {
+    const { username, email } = req.body;
 
+    const existingUser = await User.findOne({
+      $or: [{ username }, { email }],
+    });
+
+    if (existingUser) {
+      return res.status(400).json({ error: "User already exists" });
+    }
+
+    const newUser = new User({ username, email });
+    await newUser.save();
+
+    res.json(newUser);
+  } catch (err) {
+    console.error("Error creating user:", err);
+    res.status(500).json({ error: "Failed to create user" });
+  }
+});
+
+app.get("/users", async (req, res) => {
+  try {
+    const users = await User.find();
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch users" });
+  }
+});
 
 /* ---------------- EXISTING SEARCH ROUTE ---------------- */
 
