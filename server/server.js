@@ -153,6 +153,37 @@ app.post("/posts", async (req, res) => {
     res.status(500).json({ error: "Failed to create post" });
   }
 });
+app.post("/posts/:id/like", async (req, res) => {
+  try {
+    const { userId } = req.body;
+    const post = await Post.findById(req.params.id);
+
+    if (!post) {
+      return res.status(404).json({ error: "Post not found" });
+    }
+
+    const alreadyLiked = post.likes.includes(userId);
+
+    if (alreadyLiked) {
+      // Unlike
+      post.likes = post.likes.filter(id => id.toString() !== userId);
+    } else {
+      // Like
+      post.likes.push(userId);
+    }
+
+    await post.save();
+
+    res.json({
+      message: alreadyLiked ? "Unliked" : "Liked",
+      totalLikes: post.likes.length
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to like post" });
+  }
+});
 app.get("/feed", async (req, res) => {
   try {
     const posts = await Post.find()
